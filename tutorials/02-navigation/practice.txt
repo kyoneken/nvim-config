@@ -1,0 +1,278 @@
+===========================================
+  第2章: ナビゲーション - 練習用ファイル
+===========================================
+
+このファイルで実際に練習してみましょう！
+
+
+練習問題1: f と t の練習
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+以下の行で練習してください：
+
+The quick brown fox jumps over the lazy dog.
+
+タスク：
+1. 行頭にカーソルを置く（0を押す）
+2. fq で "q" へジャンプ
+3. ; で次の "o" を探すため fo と入力
+4. fx で "x" へジャンプ
+
+hello world this is a test hello world hello world
+
+タスク：
+1. fh で最初の "hello" の "h" へ
+2. ; で次の "h" へ（何回か試してみよう）
+3. , で逆方向に戻る
+
+カーソルを移動させて、find the word position quickly
+
+タスク：
+1. fp で "position" の "p" へ
+2. tq で "quickly" の手前へ
+
+
+練習問題2: % で括弧ジャンプ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+以下のコードで () [] {} の対応をチェック：
+
+function example() {
+    const array = [1, 2, 3, (4 + 5)];
+    if (array.length > 0) {
+        console.log("Hello!");
+    }
+    return {
+        status: "success",
+        data: array
+    };
+}
+
+タスク：
+1. 最初の ( にカーソルを置いて % を押す
+2. 最初の { にカーソルを置いて % を押す
+3. [ にカーソルを置いて % を押す
+
+
+練習問題3: 検索の練習（/と*）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+以下のテキストで hello を検索してみましょう：
+
+hello world
+This is a test
+hello again
+Another hello here
+Final hello at the end
+
+タスク：
+1. /hello と入力してEnter
+2. n で次の hello へ
+3. N で前の hello へ
+4. ESC でハイライトを消す
+
+以下のコードで function という単語を検索：
+
+function add(a, b) {
+    return a + b;
+}
+
+function subtract(a, b) {
+    return a - b;
+}
+
+function multiply(a, b) {
+    return a * b;
+}
+
+タスク：
+1. "function" の上にカーソルを置く
+2. * を押す（すべての function がハイライト）
+3. n で次の function へ移動
+
+
+練習問題4: マークの練習
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+← この行で ma を押してマークを設定してください
+
+（下にスクロールして...）
+
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+
+← ここまで来たら 'a を押して最初のマークに戻ってみましょう
+
+今度は複数のマーク：
+
+Position A: ここで ma
+Position B: ここで mb  
+Position C: ここで mc
+
+タスク：
+1. Position A で ma
+2. Position B で mb
+3. Position C で mc
+4. 'a, 'b, 'c でそれぞれに移動してみる
+
+
+練習問題5: 画面スクロールの練習
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+この練習は実際にやってみてください：
+
+1. gg でファイル先頭へ
+2. Ctrl-d で半ページ下へスクロール（何回か）
+3. Ctrl-u で半ページ上へスクロール
+4. G でファイル末尾へ
+5. zz で画面中央に表示
+
+
+練習問題6: 行番号ジャンプ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+現在の行番号を確認：
+- 画面の左側または右側に行番号が表示されています
+
+タスク：
+1. :50 または 50G で50行目へジャンプ
+2. :100 で100行目へ
+3. gg で先頭へ戻る
+
+
+練習問題7: 単語とWORDの違い
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+hello-world-test this_is_a_test camelCaseExample
+
+タスク1: 単語移動（w）
+1. 行頭で w を連打 → 記号で区切られる
+   hello → - → world → - → test
+
+タスク2: WORD移動（W）
+1. 行頭で W を連打 → 空白だけで区切られる
+   hello-world-test → this_is_a_test → camelCaseExample
+
+
+練習問題8: 効率的な移動の比較
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+以下の行で最後の "end" まで移動してください：
+
+start middle center position target destination end
+
+方法1（非効率）: llllllllllllllllllllllll...
+方法2（効率的）: fend または /end または $
+
+どちらが速いか体感してください！
+
+
+練習問題9: 実践: コードの読解
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+以下のコードで練習：
+
+class User {
+    constructor(name, email) {
+        this.name = name;
+        this.email = email;
+    }
+    
+    greet() {
+        console.log(`Hello, ${this.name}!`);
+    }
+    
+    updateEmail(newEmail) {
+        this.email = newEmail;
+        console.log(`Email updated to ${this.email}`);
+    }
+}
+
+const user = new User("Alice", "alice@example.com");
+user.greet();
+user.updateEmail("alice@newdomain.com");
+
+タスク：
+1. /email で email を検索
+2. n で次の email へ移動
+3. "User" の上で * を押す
+4. % で括弧の対応を確認
+5. ma でマークしてから G で末尾へ、'a で戻る
+
+
+練習問題10: スピードチャレンジ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+以下のタスクをできるだけ速く：
+
+目標: START から END まで最速で移動
+
+START ─────────────────────────────────────────────────────────┐
+                                                                 │
+いろいろなテキスト                                               │
+もっとテキスト                                                   │
+さらにテキスト                                                   │
+                                                                 │
+function test() {                                                │
+    return "hello";                                              │
+}                                                                │
+                                                                 │
+もっと下に                                                       │
+まだまだ                                                         │
+                                                                 │
+END ─────────────────────────────────────────────────────────────┘
+
+方法を比較：
+1. jjjjjjjjjj... （遅い）
+2. /END （速い！）
+3. G （ファイル末尾なら最速）
+
+
+自由練習スペース
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ここで自由に練習してください：
+- f/t で移動
+- 検索
+- マーク
+- スクロール
+
+Lorem ipsum dolor sit amet consectetur adipiscing elit.
+The quick brown fox jumps over the lazy dog multiple times.
+Practice makes perfect, so keep trying these movements!
+Navigate efficiently using all the commands you learned.
+
+
+
+
+===========================================
+  お疲れ様でした！🎉
+===========================================
+
+できたこと：
+□ f/t で行内高速移動
+□ /と*で検索
+□ nとNで検索結果を移動
+□ マーク（m, '）の設定とジャンプ
+□ 画面スクロール（Ctrl-d/u, zz）
+□ %で括弧ジャンプ
+
+次は「第3章: 編集操作」に進みましょう！
