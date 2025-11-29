@@ -1,16 +1,35 @@
-plugged/
-pack/
-*.log
+# 旧設定のバックアップファイル
+*.backup
+
+# lazy.nvimのロックファイル（オプション: チーム共有する場合はコメントアウト）
+lazy-lock.json
+
+# システムファイル
 .DS_Store
+*.log
 .netrwhist
+
+# スワップファイル
 *.swp
 *.swo
 *~
-coc-settings.json.backup
+*.un~
+
+# プラグインディレクトリ（旧設定）
+plugged/
+pack/
+
+# Lua関連
 lua/**/*.luac
+.luarc.json
+
+# セッション・履歴
 session/
 *.vim.session
 undodir/
-*.un~
-.luarc.json
+
+# スペル辞書
 spell/
+
+# その他
+coc-settings.json.backup
