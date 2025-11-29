@@ -1,0 +1,16 @@
+plugged/
+pack/
+*.log
+.DS_Store
+.netrwhist
+*.swp
+*.swo
+*~
+coc-settings.json.backup
+lua/**/*.luac
+session/
+*.vim.session
+undodir/
+*.un~
+.luarc.json
+spell/
