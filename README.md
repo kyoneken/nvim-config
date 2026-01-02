@@ -36,7 +36,6 @@ brew install neovim
 brew install git node ripgrep lazygit
 
 # Nerd Font（例: JetBrains Mono）
-brew tap homebrew/cask-fonts
 brew install --cask font-jetbrains-mono-nerd-font
 ```
 
