@@ -41,7 +41,7 @@ brew install --cask font-jetbrains-mono-nerd-font
 
 ## 🚀 インストール
 
-### 新規インストール
+### 方法1: Git Clone（推奨）
 
 ```bash
 # 既存の設定をバックアップ（存在する場合）
@@ -54,10 +54,62 @@ git clone <your-repo-url> ~/.config/nvim
 nvim
 ```
 
+**メリット**: 
+- 更新が簡単（`git pull`で最新版を取得可能）
+- バージョン管理が容易
+
+### 方法2: ファイルダウンロード
+
+Gitを使わずにインストールする場合:
+
+```bash
+# 既存の設定をバックアップ（存在する場合）
+mv ~/.config/nvim ~/.config/nvim.backup
+
+# 設定ディレクトリを作成
+mkdir -p ~/.config/nvim/lua/config ~/.config/nvim/lua/plugins
+
+# GitHubからZIPファイルをダウンロードして展開
+# （ブラウザでダウンロードするか、以下のコマンドを使用）
+curl -L <your-repo-url>/archive/refs/heads/main.zip -o nvim-config.zip
+unzip nvim-config.zip
+mv nvim-config-main/* ~/.config/nvim/
+rm -rf nvim-config.zip nvim-config-main
+
+# Neovimを起動（プラグインが自動インストールされます）
+nvim
+```
+
+**最低限必要なファイル・ディレクトリ**:
+```
+~/.config/nvim/
+├── init.lua                    # 必須: メインエントリーポイント
+├── lua/
+│   ├── config/                 # 必須: 基本設定
+│   │   ├── lazy.lua            # 必須: プラグインマネージャー
+│   │   ├── options.lua         # 必須: Vim基本設定
+│   │   ├── keymaps.lua         # 推奨: キーマッピング
+│   │   └── autocmds.lua        # オプション: 自動コマンド
+│   └── plugins/                # 必須: プラグイン設定
+│       ├── colorscheme.lua     # 推奨: カラースキーム
+│       ├── treesitter.lua      # 推奨: シンタックスハイライト
+│       ├── lsp.lua             # 推奨: LSP機能
+│       ├── cmp.lua             # 推奨: 補完
+│       ├── telescope.lua       # 推奨: ファイル検索
+│       └── ... (その他)        # オプション: 各種プラグイン
+```
+
+**メリット**: 
+- Gitのインストール不要
+- シンプルな手順
+
+**デメリット**: 
+- 更新時は手動で再ダウンロードが必要
+
 ### 既存環境からの移行
 
 1. 既存の設定をバックアップ
-2. このリポジトリをクローン
+2. 上記いずれかの方法でインストール
 3. 初回起動でlazy.nvimがプラグインをインストール
 
 ## 📂 ディレクトリ構造
