@@ -88,18 +88,7 @@ return {
     config = function()
       local wk = require("which-key")
       wk.setup({
-        plugins = {
-          marks = true,
-          registers = true,
-          spelling = {
-            enabled = true,
-            suggestions = 20,
-          },
-        },
-        window = {
-          border = "rounded",
-          position = "bottom",
-        },
+        preset = "modern",
       })
 
       -- グループ名の設定
@@ -183,6 +172,31 @@ return {
       }
 
       alpha.setup(dashboard.opts)
+    end,
+  },
+
+  -- Colorizer: カラーコードを色で表示
+  {
+    "catgoose/nvim-colorizer.lua",
+    event = "VeryLazy",
+    config = function()
+      require("colorizer").setup({
+        filetypes = { "*" },
+        user_default_options = {
+          RGB = true,
+          RRGGBB = true,
+          names = false,
+          RRGGBBAA = true,
+          AARRGGBB = true,
+          rgb_fn = true,
+          hsl_fn = true,
+          css = true,
+          css_fn = true,
+          mode = "background",
+          tailwind = "both",
+        },
+        buftypes = {},
+      })
     end,
   },
 }
