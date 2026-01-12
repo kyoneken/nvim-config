@@ -197,8 +197,6 @@ return {
         },
         buftypes = {},
       })
-      -- 起動時に現在のバッファにアタッチ
-      vim.cmd("ColorizerAttachToBuffer")
     end,
   },
 }
