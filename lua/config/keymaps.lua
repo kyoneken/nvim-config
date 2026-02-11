@@ -74,6 +74,19 @@ keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "コードアク
 keymap.set("n", "<leader>dd", "<cmd>Trouble diagnostics toggle<CR>", { desc = "診断一覧" })
 keymap.set("n", "<leader>dq", vim.diagnostic.setloclist, { desc = "診断をQuickfixへ" })
 
+-- Go開発操作 (<leader>c - code)
+keymap.set("n", "<leader>ct", "<cmd>GoTest<CR>", { desc = "[Go] テスト実行" })
+keymap.set("n", "<leader>cT", "<cmd>GoTestFunc<CR>", { desc = "[Go] 関数テスト" })
+keymap.set("n", "<leader>cc", "<cmd>GoCoverage<CR>", { desc = "[Go] カバレッジ" })
+keymap.set("n", "<leader>cr", "<cmd>GoRun<CR>", { desc = "[Go] 実行" })
+keymap.set("n", "<leader>cb", "<cmd>GoBuild<CR>", { desc = "[Go] ビルド" })
+keymap.set("n", "<leader>ci", "<cmd>GoImport<CR>", { desc = "[Go] インポート追加" })
+keymap.set("n", "<leader>cf", "<cmd>GoFillStruct<CR>", { desc = "[Go] 構造体補完" })
+keymap.set("n", "<leader>ce", "<cmd>GoIfErr<CR>", { desc = "[Go] エラーハンドリング" })
+keymap.set("n", "<leader>ca", "<cmd>GoAlt<CR>", { desc = "[Go] テストファイル切替" })
+keymap.set("n", "<leader>cj", "<cmd>GoAddTag json<CR>", { desc = "[Go] JSONタグ追加" })
+keymap.set("n", "<leader>cy", "<cmd>GoAddTag yaml<CR>", { desc = "[Go] YAMLタグ追加" })
+
 -- その他
 keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "保存" })
 keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "閉じる" })

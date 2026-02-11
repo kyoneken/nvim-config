@@ -36,6 +36,7 @@ return {
           "pyright",
           "ts_server",
           "rust_analyzer",
+          "gopls", -- Go言語LSP
           "jsonls",
           "yamlls",
           "bashls",
@@ -75,6 +76,23 @@ return {
                 telemetry = {
                   enable = false,
                 },
+              },
+            },
+          })
+        end,
+
+        -- Go専用設定
+        ["gopls"] = function()
+          lspconfig.gopls.setup({
+            capabilities = capabilities,
+            settings = {
+              gopls = {
+                analyses = {
+                  unusedparams = true,
+                  shadow = true,
+                },
+                staticcheck = true,
+                gofumpt = true,
               },
             },
           })
