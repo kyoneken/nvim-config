@@ -24,6 +24,10 @@ return {
         "bash",
         "c",
         "diff",
+        "go", -- Go言語
+        "gomod", -- go.mod
+        "gosum", -- go.sum
+        "gowork", -- go.work
         "html",
         "javascript",
         "json",
