@@ -1,0 +1,24 @@
+# mise設定ファイルのサンプル - 動作確認用
+
+[tasks.hello]
+description = "シンプルなbashコマンド"
+run = "echo 'Hello from mise!'"
+
+[tasks.multiline]
+description = "複数行のbashスクリプト"
+run = """
+#!/bin/bash
+echo "Multi-line script"
+for i in {1..3}; do
+  echo "Count: $i"
+done
+"""
+
+[tasks.python]
+description = "Pythonスクリプトの例"
+run = """
+#!/usr/bin/env python3
+import sys
+print("Hello from Python!")
+print(f"Python version: {sys.version}")
+"""
