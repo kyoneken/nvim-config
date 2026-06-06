@@ -3,49 +3,23 @@
 -- ========================================
 
 return {
-  -- Copilot.lua: LuaネイティブなCopilot inline suggestion
+  -- GitHub Copilot: 公式Vim/Neovimプラグイン
   {
-    "zbirenbaum/copilot.lua",
+    "github/copilot.vim",
     cmd = "Copilot",
     event = "InsertEnter",
     config = function()
-      require("copilot").setup({
-        suggestion = {
-          enabled = true,
-          auto_trigger = true,
-          debounce = 75,
-          keymap = {
-            accept = "<M-l>",
-            accept_word = "<M-w>",
-            accept_line = "<M-e>",
-            next = "<M-]>",
-            prev = "<M-[>",
-            dismiss = "<C-e>",
-          },
-        },
-        panel = {
-          enabled = true,
-          auto_refresh = true,
-        },
-        filetypes = {
-          yaml = true,
-          markdown = true,
-          help = false,
-          gitcommit = true,
-          gitrebase = false,
-          ["."] = false,
-        },
-      })
-    end,
-  },
+      vim.g.copilot_no_tab_map = true
+      vim.g.copilot_assume_mapped = true
 
-  -- Copilot-cmp統合
-  {
-    "zbirenbaum/copilot-cmp",
-    dependencies = { "zbirenbaum/copilot.lua" },
-    event = "InsertEnter",
-    config = function()
-      require("copilot_cmp").setup()
+      vim.keymap.set("i", "<M-l>", 'copilot#Accept("<CR>")', {
+        expr = true,
+        replace_keycodes = false,
+        silent = true,
+      })
+      vim.keymap.set("i", "<M-]>", "<Plug>(copilot-next)", { silent = true })
+      vim.keymap.set("i", "<M-[>", "<Plug>(copilot-previous)", { silent = true })
+      vim.keymap.set("i", "<C-e>", "<Plug>(copilot-dismiss)", { silent = true })
     end,
   },
 
@@ -54,7 +28,7 @@ return {
     "CopilotC-Nvim/CopilotChat.nvim",
     branch = "main",
     dependencies = {
-      { "zbirenbaum/copilot.lua" },
+      { "github/copilot.vim" },
       { "nvim-lua/plenary.nvim" },
     },
     cmd = {

@@ -9,7 +9,6 @@ return {
     "hrsh7th/cmp-buffer",       -- バッファ内の単語を補完
     "hrsh7th/cmp-path",         -- ファイルパスを補完
     "hrsh7th/cmp-nvim-lsp",     -- LSPからの補完
-    "zbirenbaum/copilot-cmp",   -- Copilot候補をcmpに統合
     "L3MON4D3/LuaSnip",         -- スニペットエンジン
     "saadparwaiz1/cmp_luasnip", -- LuaSnipとcmpの統合
     "rafamadriz/friendly-snippets", -- 便利なスニペット集
@@ -58,7 +57,6 @@ return {
       }),
       
       sources = cmp.config.sources({
-        { name = "copilot" },
         { name = "nvim_lsp" },
         { name = "luasnip" },
         { name = "buffer" },
@@ -97,7 +95,6 @@ return {
           }
           vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
           vim_item.menu = ({
-            copilot = "[Copilot]",
             nvim_lsp = "[LSP]",
             luasnip = "[Snippet]",
             buffer = "[Buffer]",
