@@ -93,7 +93,8 @@ return {
 
       -- グループ名の設定
       wk.add({
-        { "<leader>c", group = "Copilot" },
+        { "<leader>a", group = "AI/Copilot" },
+        { "<leader>c", group = "Code" },
         { "<leader>d", group = "診断" },
         { "<leader>f", group = "検索" },
         { "<leader>g", group = "Git" },

@@ -72,6 +72,24 @@ return {
     end,
   },
 
+  -- Harpoon: 少数の作業中ファイルを高速に行き来する
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    keys = {
+      { "<leader>ha", desc = "Harpoonに追加" },
+      { "<leader>hh", desc = "Harpoon一覧" },
+      { "<leader>1", desc = "Harpoon 1" },
+      { "<leader>2", desc = "Harpoon 2" },
+      { "<leader>3", desc = "Harpoon 3" },
+      { "<leader>4", desc = "Harpoon 4" },
+    },
+    config = function()
+      require("harpoon"):setup()
+    end,
+  },
+
   -- Todo-comments: TODOハイライト
   {
     "folke/todo-comments.nvim",

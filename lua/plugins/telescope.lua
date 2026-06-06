@@ -14,6 +14,7 @@ return {
   },
   keys = {
     { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "ファイル検索" },
+    { "<leader>fp", "<cmd>Telescope git_files<cr>", desc = "Git管理ファイル検索" },
     { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "テキスト検索" },
     { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "バッファ一覧" },
     { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "ヘルプ検索" },
@@ -25,14 +26,32 @@ return {
 
     telescope.setup({
       defaults = {
-        prompt_prefix = " ",
-        selection_caret = " ",
+        prompt_prefix = "󰭎 ",
+        selection_caret = "➜ ",
         path_display = { "truncate" },
+        vimgrep_arguments = {
+          "rg",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+          "--hidden",
+          "--glob=!**/.git/*",
+        },
         file_ignore_patterns = {
-          "node_modules",
-          ".git/",
-          "dist/",
+          "%.git/",
+          "%.gradle/",
+          "%.idea/",
+          "%.next/",
+          "%.swiftpm/",
+          "%.venv/",
+          "DerivedData/",
+          "Pods/",
           "build/",
+          "dist/",
+          "node_modules/",
           "target/",
           "%.lock",
         },
@@ -53,6 +72,34 @@ return {
       pickers = {
         find_files = {
           hidden = true, -- 隠しファイルも表示
+          find_command = {
+            "rg",
+            "--files",
+            "--hidden",
+            "--glob=!**/.git/*",
+            "--glob=!**/node_modules/*",
+            "--glob=!**/.venv/*",
+            "--glob=!**/Pods/*",
+            "--glob=!**/DerivedData/*",
+            "--glob=!**/.gradle/*",
+            "--glob=!**/build/*",
+            "--glob=!**/dist/*",
+            "--glob=!**/target/*",
+          },
+        },
+        git_files = {
+          hidden = true,
+          show_untracked = true,
+          use_git_root = true,
+        },
+        live_grep = {
+          additional_args = function()
+            return { "--hidden", "--glob=!**/.git/*" }
+          end,
+        },
+        buffers = {
+          sort_mru = true,
+          ignore_current_buffer = true,
         },
       },
     })

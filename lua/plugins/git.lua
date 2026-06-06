@@ -85,4 +85,30 @@ return {
       { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit起動" },
     },
   },
+
+  -- Git conflict: コンフリクト箇所をVSCode風に見やすく解決する
+  {
+    "akinsho/git-conflict.nvim",
+    version = "*",
+    event = { "BufReadPre", "BufNewFile" },
+    keys = {
+      { "]x", "<cmd>GitConflictNextConflict<cr>", desc = "次のConflict" },
+      { "[x", "<cmd>GitConflictPrevConflict<cr>", desc = "前のConflict" },
+      { "<leader>gco", "<cmd>GitConflictChooseOurs<cr>", desc = "Conflict: oursを採用" },
+      { "<leader>gct", "<cmd>GitConflictChooseTheirs<cr>", desc = "Conflict: theirsを採用" },
+      { "<leader>gcb", "<cmd>GitConflictChooseBoth<cr>", desc = "Conflict: bothを採用" },
+      { "<leader>gcn", "<cmd>GitConflictChooseNone<cr>", desc = "Conflict: noneを採用" },
+      { "<leader>gcq", "<cmd>GitConflictListQf<cr>", desc = "Conflict一覧" },
+    },
+    config = function()
+      require("git-conflict").setup({
+        default_mappings = false,
+        disable_diagnostics = true,
+        highlights = {
+          incoming = "DiffAdd",
+          current = "DiffText",
+        },
+      })
+    end,
+  },
 }

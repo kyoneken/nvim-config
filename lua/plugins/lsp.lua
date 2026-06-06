@@ -29,75 +29,120 @@ return {
       "neovim/nvim-lspconfig",
     },
     config = function()
-      require("mason-lspconfig").setup({
-        -- 自動インストールするLSPサーバー
-        ensure_installed = {
-          "lua_ls",
-          "pyright",
-          "ts_server",
-          "rust_analyzer",
-          "gopls", -- Go言語LSP
-          "jsonls",
-          "yamlls",
-          "bashls",
-        },
-        automatic_installation = true,
-      })
-
       -- LSPサーバーの設定
       local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      capabilities.textDocument.foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      }
 
-      -- 自動設定
-      require("mason-lspconfig").setup_handlers({
-        -- デフォルトハンドラー
-        function(server_name)
-          lspconfig[server_name].setup({
-            capabilities = capabilities,
-          })
-        end,
+      local function root_pattern(...)
+        return lspconfig.util.root_pattern(...)
+      end
 
-        -- Lua専用設定
-        ["lua_ls"] = function()
-          lspconfig.lua_ls.setup({
-            capabilities = capabilities,
-            settings = {
-              Lua = {
-                runtime = {
-                  version = "LuaJIT",
-                },
-                diagnostics = {
-                  globals = { "vim" },
-                },
-                workspace = {
-                  library = vim.api.nvim_get_runtime_file("", true),
-                  checkThirdParty = false,
-                },
-                telemetry = {
-                  enable = false,
-                },
+      local servers = {
+        bashls = {},
+        eslint = {},
+        jsonls = {},
+        rust_analyzer = {},
+        yamlls = {},
+        lua_ls = {
+          settings = {
+            Lua = {
+              runtime = {
+                version = "LuaJIT",
+              },
+              diagnostics = {
+                globals = { "vim" },
+              },
+              workspace = {
+                library = vim.api.nvim_get_runtime_file("", true),
+                checkThirdParty = false,
+              },
+              telemetry = {
+                enable = false,
               },
             },
-          })
-        end,
-
-        -- Go専用設定
-        ["gopls"] = function()
-          lspconfig.gopls.setup({
-            capabilities = capabilities,
-            settings = {
-              gopls = {
-                analyses = {
-                  unusedparams = true,
-                  shadow = true,
-                },
-                staticcheck = true,
-                gofumpt = true,
+          },
+        },
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                autoSearchPaths = true,
+                diagnosticMode = "workspace",
+                typeCheckingMode = "basic",
+                useLibraryCodeForTypes = true,
               },
             },
-          })
-        end,
+          },
+        },
+        gopls = {
+          settings = {
+            gopls = {
+              analyses = {
+                unusedparams = true,
+                shadow = true,
+              },
+              staticcheck = true,
+              gofumpt = true,
+            },
+          },
+        },
+        ts_ls = {
+          root_dir = root_pattern("tsconfig.json", "jsconfig.json", "package.json", ".git"),
+          settings = {
+            typescript = {
+              inlayHints = {
+                includeInlayParameterNameHints = "literal",
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayVariableTypeHints = true,
+              },
+            },
+            javascript = {
+              inlayHints = {
+                includeInlayParameterNameHints = "literal",
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayVariableTypeHints = true,
+              },
+            },
+          },
+        },
+        kotlin_language_server = {
+          root_dir = root_pattern("settings.gradle", "settings.gradle.kts", "build.gradle", "build.gradle.kts", ".git"),
+        },
+      }
+
+      -- SwiftはXcode/Swift toolchain同梱のsourcekit-lspを使う
+      servers.sourcekit = {
+        capabilities = capabilities,
+        root_dir = root_pattern("Package.swift", "*.xcodeproj", "*.xcworkspace", ".git"),
+      }
+
+      for server_name, config in pairs(servers) do
+        config.capabilities = vim.tbl_deep_extend("force", {}, capabilities, config.capabilities or {})
+        vim.lsp.config(server_name, config)
+      end
+
+      require("mason-lspconfig").setup({
+        -- 自動インストールするLSPサーバー
+        ensure_installed = {
+          "bashls",
+          "eslint",
+          "gopls",
+          "jsonls",
+          "kotlin_language_server",
+          "lua_ls",
+          "pyright",
+          "rust_analyzer",
+          "ts_ls",
+          "yamlls",
+        },
+        automatic_enable = true,
       })
+
+      vim.lsp.enable("sourcekit")
     end,
   },
 
