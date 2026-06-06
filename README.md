@@ -1,8 +1,8 @@
 # Neovim Configuration
 
-モダンで高性能なNeovim設定 - 2025年版
+モダンで高性能なNeovim設定 - 2026年版
 
-![Neovim](https://img.shields.io/badge/Neovim-0.9+-green.svg)
+![Neovim](https://img.shields.io/badge/Neovim-0.11+-green.svg)
 ![Lua](https://img.shields.io/badge/Lua-5.1+-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-orange.svg)
 
@@ -15,16 +15,23 @@
 - 🔍 **高性能検索**: Telescopeファジーファインダー
 - 🤖 **AI支援**: GitHub Copilot + CopilotChat（日本語対応）
 - 🐙 **Git統合**: LazyGit + Gitsigns + Fugitive
+- 🧭 **高速移動**: Telescope + Bufferline + Harpoon
 - 📚 **完全日本語**: ドキュメントとUI表示が日本語
 
 ## 📋 必要要件
 
-- Neovim >= 0.9.0
+- Neovim >= 0.11.0
 - Git
-- Node.js（Copilot用）
+- Node.js 18以上（Copilot用）
+- ripgrep（Telescopeの検索用）
+- fd（オプション、Telescopeの高速ファイル検索用）
 - [Nerd Font](https://www.nerdfonts.com/)（アイコン表示用）
-- ripgrep（Telescopeのgrep検索用）
 - LazyGit（オプション、Git操作用）
+- Swift: XcodeまたはSwift toolchain（`sourcekit-lsp`）
+- Python: Python実行環境
+- Go: Go toolchain
+- JS/TS: Node.js/npm/pnpmなど
+- Kotlin: JDK + Gradle
 
 ### macOSでのインストール
 
@@ -33,7 +40,7 @@
 brew install neovim
 
 # 依存ツール
-brew install git node ripgrep lazygit
+brew install git node ripgrep fd lazygit
 
 # Nerd Font（例: JetBrains Mono）
 brew install --cask font-jetbrains-mono-nerd-font
@@ -149,16 +156,29 @@ nvim
 
 #### ファイル操作
 - `<Space>ff` - ファイル検索
+- `<Space>fp` - Git管理ファイル検索（巨大リポジトリではまずこちら）
 - `<Space>fg` - テキスト検索
 - `<Space>fb` - バッファ一覧
 - `<Space>fr` - 最近使ったファイル
 - `<Space>e` - ファイルツリー
+
+#### 複数ファイル移動
+- `Shift-h` / `Shift-l` - 前/次のバッファへ移動
+- `<Space>fb` - 開いているバッファから選ぶ
+- `<Space>ha` - 今のファイルをHarpoonに追加
+- `<Space>hh` - Harpoon一覧
+- `<Space>1`〜`<Space>4` - Harpoon登録ファイルへ即移動
 
 #### Git操作
 - `<Space>gg` - LazyGit起動
 - `<Space>hp` - 変更箇所プレビュー
 - `<Space>hs` - Hunkをステージ
 - `]c` / `[c` - 次/前の変更箇所へ
+- `]x` / `[x` - 次/前のコンフリクトへ
+- `<Space>gco` - conflictでoursを採用
+- `<Space>gct` - conflictでtheirsを採用
+- `<Space>gcb` - conflictでbothを採用
+- `<Space>gcq` - conflict一覧をQuickfixに表示
 
 #### LSP機能
 - `gd` - 定義へジャンプ
@@ -169,11 +189,24 @@ nvim
 - `<Space>lf` - フォーマット
 
 #### Copilot
-- `Ctrl-j` - 提案を受け入れ
-- `<Space>ce` - コード説明（選択後）
-- `<Space>cr` - コードレビュー（選択後）
-- `<Space>cf` - バグ修正（選択後）
-- `<Space>cc` - チャット切替
+- `Alt-l` - inline suggestionを受け入れ
+- `Alt-w` - 単語単位で受け入れ
+- `Alt-e` - 行単位で受け入れ
+- `Alt-]` / `Alt-[` - 次/前の提案
+- `<Space>aa` - チャット切替
+- `<Space>ae` - コード説明（選択後）
+- `<Space>ar` - コードレビュー（選択後）
+- `<Space>af` - バグ修正（選択後）
+
+## 💻 対応言語
+
+- Swift: `sourcekit-lsp` + Treesitter Swift
+- Python: Pyright + Treesitter Python
+- Go: gopls + go.nvim + Treesitter Go
+- JavaScript/TypeScript: ts_ls + ESLint + Treesitter JS/TS/TSX
+- Kotlin: kotlin-language-server + Treesitter Kotlin
+
+初回起動後に `:Mason` または `:Lazy sync` を実行すると、Mason管理のLSPが自動インストールされます。Swiftの`sourcekit-lsp`はXcode/Swift toolchain側の提供です。
 
 詳細は [`doc/basic-usage.md`](doc/basic-usage.md) を参照してください。
 
@@ -203,6 +236,7 @@ return {
 - [lazy.nvim](https://github.com/folke/lazy.nvim) - プラグインマネージャー
 - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) - シンタックスハイライト
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) - ファジーファインダー
+- [harpoon](https://github.com/ThePrimeagen/harpoon) - 作業中ファイルの高速移動
 - [mason.nvim](https://github.com/williamboman/mason.nvim) - LSPサーバー管理
 - [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) - LSP設定
 - [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) - 補完エンジン
@@ -218,9 +252,11 @@ return {
 - [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim) - Git差分表示
 - [vim-fugitive](https://github.com/tpope/vim-fugitive) - Git操作
 - [lazygit.nvim](https://github.com/kdheepak/lazygit.nvim) - LazyGit統合
+- [git-conflict.nvim](https://github.com/akinsho/git-conflict.nvim) - conflict解決UI
 
 ### AI
-- [copilot.vim](https://github.com/github/copilot.vim) - GitHub Copilot
+- [copilot.lua](https://github.com/zbirenbaum/copilot.lua) - GitHub Copilot
+- [copilot-cmp](https://github.com/zbirenbaum/copilot-cmp) - Copilot補完統合
 - [CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim) - AIチャット
 
 完全なリストは [`doc/README.md`](doc/README.md) を参照してください。

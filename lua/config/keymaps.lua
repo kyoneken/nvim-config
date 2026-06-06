@@ -50,6 +50,7 @@ keymap.set("n", "N", "Nzzzv", opts)
 
 -- ファイル/検索系 (<leader>f)
 keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<CR>", { desc = "ファイル検索" })
+keymap.set("n", "<leader>fp", "<cmd>Telescope git_files<CR>", { desc = "Git管理ファイル検索" })
 keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", { desc = "テキスト検索" })
 keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { desc = "バッファ一覧" })
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "ヘルプ検索" })
@@ -63,6 +64,7 @@ keymap.set("n", "<leader>gg", "<cmd>LazyGit<CR>", { desc = "LazyGit起動" })
 keymap.set("n", "<leader>gs", "<cmd>Telescope git_status<CR>", { desc = "Git状態" })
 keymap.set("n", "<leader>gc", "<cmd>Telescope git_commits<CR>", { desc = "Gitコミット履歴" })
 keymap.set("n", "<leader>gb", "<cmd>Telescope git_branches<CR>", { desc = "Gitブランチ" })
+keymap.set("n", "<leader>gC", "<cmd>GitConflictListQf<CR>", { desc = "Conflict一覧" })
 
 -- LSP操作 (<leader>l)
 keymap.set("n", "<leader>lf", vim.lsp.buf.format, { desc = "フォーマット" })
@@ -86,6 +88,14 @@ keymap.set("n", "<leader>ce", "<cmd>GoIfErr<CR>", { desc = "[Go] エラーハン
 keymap.set("n", "<leader>ca", "<cmd>GoAlt<CR>", { desc = "[Go] テストファイル切替" })
 keymap.set("n", "<leader>cj", "<cmd>GoAddTag json<CR>", { desc = "[Go] JSONタグ追加" })
 keymap.set("n", "<leader>cy", "<cmd>GoAddTag yaml<CR>", { desc = "[Go] YAMLタグ追加" })
+
+-- Harpoon: よく行き来するファイル
+keymap.set("n", "<leader>ha", function() require("harpoon"):list():add() end, { desc = "Harpoonに追加" })
+keymap.set("n", "<leader>hh", function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end, { desc = "Harpoon一覧" })
+keymap.set("n", "<leader>1", function() require("harpoon"):list():select(1) end, { desc = "Harpoon 1" })
+keymap.set("n", "<leader>2", function() require("harpoon"):list():select(2) end, { desc = "Harpoon 2" })
+keymap.set("n", "<leader>3", function() require("harpoon"):list():select(3) end, { desc = "Harpoon 3" })
+keymap.set("n", "<leader>4", function() require("harpoon"):list():select(4) end, { desc = "Harpoon 4" })
 
 -- その他
 keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "保存" })
