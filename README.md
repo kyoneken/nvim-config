@@ -201,13 +201,15 @@ nvim
 
 ## 💻 対応言語
 
-- Swift: `sourcekit-lsp` + Treesitter Swift
+- Swift: `sourcekit-lsp`（Treesitter Swiftは任意）
 - Python: Pyright + Treesitter Python
 - Go: gopls + go.nvim + Treesitter Go
 - JavaScript/TypeScript: ts_ls + ESLint + Treesitter JS/TS/TSX
 - Kotlin: kotlin-language-server + Treesitter Kotlin
 
 初回起動後に `:Mason` または `:Lazy sync` を実行すると、Mason管理のLSPが自動インストールされます。Swiftの`sourcekit-lsp`はXcode/Swift toolchain側の提供です。
+
+SwiftのTreesitter parserは環境によって `tree-sitter` CLI が必要になるため、自動インストール対象から外しています。Swiftの詳細なTreesitterハイライトも使いたい場合は、`brew install tree-sitter` 後にNeovimで `:TSInstall swift` を実行してください。
 
 詳細は [`doc/basic-usage.md`](doc/basic-usage.md) を参照してください。
 
