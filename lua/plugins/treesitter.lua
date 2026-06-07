@@ -40,7 +40,6 @@ return {
         "query",
         "regex",
         "rust",
-        "swift",
         "toml",
         "tsx",
         "typescript",

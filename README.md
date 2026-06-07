@@ -190,23 +190,26 @@ nvim
 
 #### Copilot
 - `Alt-l` - inline suggestionを受け入れ
-- `Alt-w` - 単語単位で受け入れ
-- `Alt-e` - 行単位で受け入れ
 - `Alt-]` / `Alt-[` - 次/前の提案
+- `Ctrl-e` - 提案を閉じる
 - `<Space>aa` - チャット切替
 - `<Space>ae` - コード説明（選択後）
 - `<Space>ar` - コードレビュー（選択後）
 - `<Space>af` - バグ修正（選択後）
 
+初回利用時は公式手順に従い、Neovim内で `:Copilot setup` を実行してGitHub認証を行います。必要に応じて `:Copilot enable` で有効化できます。
+
 ## 💻 対応言語
 
-- Swift: `sourcekit-lsp` + Treesitter Swift
+- Swift: `sourcekit-lsp`（Treesitter Swiftは任意）
 - Python: Pyright + Treesitter Python
 - Go: gopls + go.nvim + Treesitter Go
 - JavaScript/TypeScript: ts_ls + ESLint + Treesitter JS/TS/TSX
 - Kotlin: kotlin-language-server + Treesitter Kotlin
 
 初回起動後に `:Mason` または `:Lazy sync` を実行すると、Mason管理のLSPが自動インストールされます。Swiftの`sourcekit-lsp`はXcode/Swift toolchain側の提供です。
+
+SwiftのTreesitter parserは環境によって `tree-sitter` CLI が必要になるため、自動インストール対象から外しています。Swiftの詳細なTreesitterハイライトも使いたい場合は、`brew install tree-sitter` 後にNeovimで `:TSInstall swift` を実行してください。
 
 詳細は [`doc/basic-usage.md`](doc/basic-usage.md) を参照してください。
 
@@ -255,8 +258,7 @@ return {
 - [git-conflict.nvim](https://github.com/akinsho/git-conflict.nvim) - conflict解決UI
 
 ### AI
-- [copilot.lua](https://github.com/zbirenbaum/copilot.lua) - GitHub Copilot
-- [copilot-cmp](https://github.com/zbirenbaum/copilot-cmp) - Copilot補完統合
+- [copilot.vim](https://github.com/github/copilot.vim) - GitHub Copilot公式Vim/Neovimプラグイン
 - [CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim) - AIチャット
 
 完全なリストは [`doc/README.md`](doc/README.md) を参照してください。
