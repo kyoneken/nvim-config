@@ -189,7 +189,8 @@ nvim
 - `<Space>lf` - フォーマット
 
 #### Copilot
-- `Alt-l` - inline suggestionを受け入れ
+- `Tab` - inline suggestionを受け入れ
+- `Alt-l` - inline suggestionを受け入れ（代替）
 - `Alt-]` / `Alt-[` - 次/前の提案
 - `Ctrl-e` - 提案を閉じる
 - `<Space>aa` - チャット切替
