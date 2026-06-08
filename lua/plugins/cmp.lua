@@ -17,6 +17,22 @@ return {
     local cmp = require("cmp")
     local luasnip = require("luasnip")
 
+    local function copilot_suggestion_visible()
+      if vim.fn.exists("*copilot#GetDisplayedSuggestion") == 0 then
+        return false
+      end
+
+      local ok, suggestion = pcall(vim.fn["copilot#GetDisplayedSuggestion"])
+      return ok and type(suggestion) == "table" and suggestion.text ~= nil and suggestion.text ~= ""
+    end
+
+    local function accept_copilot_suggestion()
+      local keys = vim.fn["copilot#Accept"]("")
+      if keys ~= "" then
+        vim.api.nvim_feedkeys(keys, "i", true)
+      end
+    end
+
     -- friendly-snippetsの読み込み
     require("luasnip.loaders.from_vscode").lazy_load()
 
@@ -36,7 +52,9 @@ return {
         
         -- Tab/Shift-Tabでの移動
         ["<Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
+          if copilot_suggestion_visible() then
+            accept_copilot_suggestion()
+          elseif cmp.visible() then
             cmp.select_next_item()
           elseif luasnip.expand_or_jumpable() then
             luasnip.expand_or_jump()
