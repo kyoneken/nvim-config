@@ -10,13 +10,31 @@
 
 - 🚀 **高速起動**: lazy.nvimによる最適化された遅延読み込み
 - 🎨 **モダンUI**: TokyoNight + Lualine + Noice.nvim
-- 💡 **強力なLSP**: Mason + nvim-lspconfigによる統合開発環境
+- 💡 **多言語LSP**: Swift / Python / Go / JavaScript / TypeScript / Kotlin を中心にした統合開発環境
 - 🌳 **Treesitter**: AST基盤の高度なシンタックスハイライト
-- 🔍 **高性能検索**: Telescopeファジーファインダー
-- 🤖 **AI支援**: GitHub Copilot + CopilotChat（日本語対応）
-- 🐙 **Git統合**: LazyGit + Gitsigns + Fugitive
-- 🧭 **高速移動**: Telescope + Bufferline + Harpoon
+- 🔍 **巨大リポジトリ対応検索**: Telescope + ripgrepでGit管理ファイル検索と全文検索を使い分け
+- 🤖 **AI支援**: 公式GitHub Copilot + CopilotChat（日本語対応）
+- 🐙 **Git統合**: LazyGit + Gitsigns + Fugitive + conflict解決UI
+- 🧭 **高速移動**: Bufferline + Telescope + Harpoonで作業中ファイルを素早く往復
 - 📚 **完全日本語**: ドキュメントとUI表示が日本語
+
+## 🧭 まず覚える操作
+
+日常的にはこのあたりだけで十分回せます。
+
+| 目的 | キー | 補足 |
+|---|---|---|
+| Git管理ファイルを探す | `<Space>fp` | 大きいリポジトリではまずこれ |
+| すべてのファイルを探す | `<Space>ff` | hidden fileも対象。除外設定あり |
+| 文字列検索 | `<Space>fg` | `rg` ベースの全文検索 |
+| 開いているファイルへ戻る | `<Space>fb` | バッファ一覧 |
+| 前後のバッファへ移動 | `Shift-h` / `Shift-l` | 直近の複数ファイル移動に便利 |
+| よく使うファイルを登録 | `<Space>ha` | Harpoonに追加 |
+| 登録ファイルへ移動 | `<Space>1`〜`<Space>4` | 作業中の主要ファイルへ即移動 |
+| Git UIを開く | `<Space>gg` | LazyGit |
+| AIチャットを開く | `<Space>aa` | CopilotChat |
+
+おすすめの流れは、`<Space>fp` でファイルを開き、よく行き来するものを `<Space>ha` で登録し、以後は `<Space>1`〜`<Space>4` や `Shift-h` / `Shift-l` で移動する使い方です。
 
 ## 📋 必要要件
 
@@ -33,18 +51,46 @@
 - JS/TS: Node.js/npm/pnpmなど
 - Kotlin: JDK + Gradle
 
+Swift開発ではXcodeまたはSwift toolchainに含まれる `sourcekit-lsp` を使います。Python/Go/JS/TS/KotlinのLSPはMason経由で導入されます。
+
 ### macOSでのインストール
 
 ```bash
-# Neovim
-brew install neovim
-
-# 依存ツール
-brew install git node ripgrep fd lazygit
+# Neovimと依存ツール
+brew install neovim git node ripgrep fd lazygit
 
 # Nerd Font（例: JetBrains Mono）
 brew install --cask font-jetbrains-mono-nerd-font
 ```
+
+## 💻 対応言語
+
+| 言語 | LSP / 補助 | 備考 |
+|---|---|---|
+| Swift | `sourcekit-lsp` | Xcode / Swift toolchain側で提供 |
+| Python | Pyright | Masonで導入 |
+| Go | gopls + go.nvim | テスト、実行、タグ追加などのGo操作あり |
+| JavaScript / TypeScript | ts_ls + ESLint | `package.json` / `tsconfig.json` をroot検出に利用 |
+| Kotlin | kotlin-language-server | Gradle系ファイルをroot検出に利用 |
+
+初回起動後に `:Mason` または `:Lazy sync` を実行すると、Mason管理のLSPが自動インストールされます。
+
+SwiftのTreesitter parserは環境によって `tree-sitter` CLI が必要になるため、自動インストール対象から外しています。Swiftの詳細なTreesitterハイライトも使いたい場合は、`brew install tree-sitter` 後にNeovimで `:TSInstall swift` を実行してください。
+
+### Go向け操作
+
+| 目的 | キー |
+|---|---|
+| テスト実行 | `<Space>ct` |
+| カーソル位置の関数テスト | `<Space>cT` |
+| 実行 | `<Space>cr` |
+| ビルド | `<Space>cb` |
+| import追加 | `<Space>ci` |
+| struct補完 | `<Space>cf` |
+| if err補完 | `<Space>ce` |
+| テストファイル切替 | `<Space>ca` |
+| JSONタグ追加 | `<Space>cj` |
+| YAMLタグ追加 | `<Space>cy` |
 
 ## 🚀 インストール
 
@@ -119,6 +165,21 @@ nvim
 2. 上記いずれかの方法でインストール
 3. 初回起動でlazy.nvimがプラグインをインストール
 
+### 初回起動後にやること
+
+```vim
+:Lazy sync
+:Mason
+:checkhealth
+```
+
+Copilotを使う場合は、GitHub公式手順に従ってNeovim内で認証します。
+
+```vim
+:Copilot setup
+:Copilot enable
+```
+
 ## 📂 ディレクトリ構造
 
 ```
@@ -162,6 +223,8 @@ nvim
 - `<Space>fr` - 最近使ったファイル
 - `<Space>e` - ファイルツリー
 
+巨大なプロジェクトでは `<Space>fp` を優先してください。`git ls-files` ベースでGit管理ファイルに絞るため、`node_modules` やビルド成果物が多い環境でも扱いやすくなります。未管理ファイルや隠しファイルも含めて探したいときは `<Space>ff` を使います。
+
 #### 複数ファイル移動
 - `Shift-h` / `Shift-l` - 前/次のバッファへ移動
 - `<Space>fb` - 開いているバッファから選ぶ
@@ -198,18 +261,6 @@ nvim
 - `<Space>af` - バグ修正（選択後）
 
 初回利用時は公式手順に従い、Neovim内で `:Copilot setup` を実行してGitHub認証を行います。必要に応じて `:Copilot enable` で有効化できます。
-
-## 💻 対応言語
-
-- Swift: `sourcekit-lsp`（Treesitter Swiftは任意）
-- Python: Pyright + Treesitter Python
-- Go: gopls + go.nvim + Treesitter Go
-- JavaScript/TypeScript: ts_ls + ESLint + Treesitter JS/TS/TSX
-- Kotlin: kotlin-language-server + Treesitter Kotlin
-
-初回起動後に `:Mason` または `:Lazy sync` を実行すると、Mason管理のLSPが自動インストールされます。Swiftの`sourcekit-lsp`はXcode/Swift toolchain側の提供です。
-
-SwiftのTreesitter parserは環境によって `tree-sitter` CLI が必要になるため、自動インストール対象から外しています。Swiftの詳細なTreesitterハイライトも使いたい場合は、`brew install tree-sitter` 後にNeovimで `:TSInstall swift` を実行してください。
 
 詳細は [`doc/basic-usage.md`](doc/basic-usage.md) を参照してください。
 
@@ -279,6 +330,22 @@ return {
 ```vim
 :Mason
 ```
+
+### Copilot認証
+```vim
+:Copilot setup
+:Copilot status
+```
+
+### Swift Treesitterでtree-sitter CLIエラーが出る場合
+
+SwiftのTreesitter parserは自動インストール対象から外しています。手動で `:TSInstall swift` した場合に `tree-sitter CLI not found` が出るときは、次を実行してください。
+
+```bash
+brew install tree-sitter
+```
+
+Swift parserが不要なら `:TSUninstall swift` で外せます。Swiftの補完や定義ジャンプは `sourcekit-lsp` 側で動くため、Treesitter Swiftは必須ではありません。
 
 詳細は [`doc/basic-usage.md`](doc/basic-usage.md#トラブルシューティング) を参照してください。
 
