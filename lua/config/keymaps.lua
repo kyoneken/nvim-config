@@ -85,12 +85,12 @@ keymap.set("n", "<leader>cT", function()
   end
 
   local cursor = vim.api.nvim_win_get_cursor(0)
-  local position = { line = cursor[1] - 1, character = cursor[2] }
+  local cursor_line = vim.api.nvim_get_current_line()
   local params = { textDocument = vim.lsp.util.make_text_document_params(0) }
   local responses = vim.lsp.buf_request_sync(0, "textDocument/documentSymbol", params, 1500)
   local test_symbol
 
-  local function contains(range)
+  local function contains(range, position)
     if position.line < range.start.line or position.line > range["end"].line then
       return false
     end
@@ -103,23 +103,29 @@ keymap.set("n", "<leader>cT", function()
     return true
   end
 
-  local function visit(symbols)
+  local function visit(symbols, position)
     for _, symbol in ipairs(symbols or {}) do
       local range = symbol.range or (symbol.location and symbol.location.range)
       if
         symbol.kind == vim.lsp.protocol.SymbolKind.Function
         and symbol.name:match("^Test[A-Z0-9_][%w_]*$")
         and range
-        and contains(range)
+        and contains(range, position)
       then
         test_symbol = symbol
       end
-      visit(symbol.children)
+      visit(symbol.children, position)
     end
   end
 
-  for _, response in pairs(responses or {}) do
-    visit(response.result)
+  for client_id, response in pairs(responses or {}) do
+    local client = vim.lsp.get_client_by_id(client_id)
+    local encoding = client and client.offset_encoding or "utf-16"
+    local position = {
+      line = cursor[1] - 1,
+      character = vim.str_utfindex(cursor_line, encoding, cursor[2], false),
+    }
+    visit(response.result, position)
   end
 
   if not test_symbol then
