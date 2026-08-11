@@ -88,7 +88,6 @@
 │   │   ├── autocmds.lua  # 自動コマンド
 │   │   └── lazy.lua      # lazy.nvim 設定
 │   └── plugins/
-│       ├── treesitter.lua
 │       ├── lsp.lua
 │       ├── cmp.lua
 │       ├── telescope.lua

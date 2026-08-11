@@ -78,7 +78,26 @@ keymap.set("n", "<leader>dq", vim.diagnostic.setloclist, { desc = "診断をQuic
 
 -- Go開発操作 (<leader>c - code)
 keymap.set("n", "<leader>ct", "<cmd>GoTest<CR>", { desc = "[Go] テスト実行" })
-keymap.set("n", "<leader>cT", "<cmd>GoTestFunc<CR>", { desc = "[Go] 関数テスト" })
+keymap.set("n", "<leader>cT", function()
+  local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+  local lines = vim.api.nvim_buf_get_lines(0, 0, cursor_line, false)
+
+  for line_number = cursor_line, 1, -1 do
+    local line = lines[line_number]
+    if line:match("^%s*func%s") then
+      local test_name = line:match("^%s*func%s+(Test[A-Z0-9_][%w_]*)%s*%(")
+      if not test_name then
+        vim.notify("カーソルは Go のテスト関数内にありません", vim.log.levels.WARN)
+        return
+      end
+
+      require("go.gotest").test_package("-r", "^" .. test_name .. "$")
+      return
+    end
+  end
+
+  vim.notify("Go のテスト関数が見つかりません", vim.log.levels.WARN)
+end, { desc = "[Go] 関数テスト" })
 keymap.set("n", "<leader>cc", "<cmd>GoCoverage<CR>", { desc = "[Go] カバレッジ" })
 keymap.set("n", "<leader>cr", "<cmd>GoRun<CR>", { desc = "[Go] 実行" })
 keymap.set("n", "<leader>cb", "<cmd>GoBuild<CR>", { desc = "[Go] ビルド" })
