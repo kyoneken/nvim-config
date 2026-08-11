@@ -104,3 +104,11 @@ keymap.set("n", "<leader>x", "<cmd>bd<CR>", { desc = "バッファ削除" })
 
 -- Lazy (プラグインマネージャー)
 keymap.set("n", "<leader>L", "<cmd>Lazy<CR>", { desc = "Lazy UI" })
+
+keymap.set({ "n", "x" }, "<C-space>", function()
+  vim.treesitter.select("parent")
+end, { desc = "構文ノードを拡張選択" })
+
+keymap.set("x", "<BS>", function()
+  vim.treesitter.select("child")
+end, { desc = "構文ノードの選択を縮小" })

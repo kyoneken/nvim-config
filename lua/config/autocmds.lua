@@ -60,3 +60,23 @@ autocmd("LspAttach", {
     vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
   end,
 })
+
+local bundled_treesitter_parsers = {
+  c = true,
+  lua = true,
+  markdown = true,
+  markdown_inline = true,
+  query = true,
+  vim = true,
+  vimdoc = true,
+}
+
+autocmd("FileType", {
+  group = augroup("NvimCoreTreesitter", { clear = true }),
+  callback = function(event)
+    local lang = vim.treesitter.language.get_lang(vim.bo[event.buf].filetype)
+    if lang and bundled_treesitter_parsers[lang] and vim.treesitter.language.add(lang) then
+      vim.treesitter.start(event.buf, lang)
+    end
+  end,
+})
