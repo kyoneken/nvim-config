@@ -34,3 +34,4 @@ spell/
 
 # その他
 coc-settings.json.backup
+.worktrees/
