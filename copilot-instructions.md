@@ -26,7 +26,7 @@
 ### 推奨プラグイン構成
 
 #### コア機能
-- **nvim-treesitter**: 高度なシンタックスハイライトとコード理解
+- **Neovim標準Tree-sitter**: 同梱パーサーを使ったシンタックスハイライトとコード理解
 - **telescope.nvim**: ファジーファインダー(fzf-luaも選択肢)
 - **nvim-lspconfig**: LSPクライアント設定
 - **mason.nvim**: LSPサーバー、DAP、リンター、フォーマッターの統合管理
