@@ -89,7 +89,7 @@ brew install --cask font-jetbrains-mono-nerd-font
 
 初回起動後に `:Mason` または `:Lazy sync` を実行すると、Mason管理のLSPが自動インストールされます。
 
-Tree-sitterのハイライトはNeovim同梱のパーサーだけを使います。C、Lua、Markdown、Query、Vim、Vim helpで有効になり、外部言語はLSPと通常のsyntax supportにフォールバックします。外部パーサーのインストールは不要です。
+Tree-sitterのハイライトはNeovim同梱のパーサーだけを使います。C、Lua、Markdown、`markdown_inline`（Markdownインライン）、Query、Vim、Vim helpで有効になり、外部言語はLSPと通常のsyntax supportにフォールバックします。外部パーサーのインストールは不要です。
 
 ### Go向け操作
 

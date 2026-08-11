@@ -55,7 +55,7 @@
 
 ## Tree-sitter
 
-Tree-sitterは外部プラグインを使わず、Neovim本体の機能として設定しています。`lua/config/autocmds.lua` で同梱パーサー（C、Lua、Markdown、Query、Vim、Vim help）に対してハイライトを有効にし、`lua/config/keymaps.lua` で構文ノードの拡張・縮小選択キーマップを設定しています。外部言語はLSPと通常のsyntax supportを使います。
+Tree-sitterは外部プラグインを使わず、Neovim本体の機能として設定しています。`lua/config/autocmds.lua` で同梱パーサー（C、Lua、Markdown、`markdown_inline`（Markdownインライン）、Query、Vim、Vim help）に対してハイライトを有効にし、`lua/config/keymaps.lua` で構文ノードの拡張・縮小選択キーマップを設定しています。外部言語はLSPと通常のsyntax supportを使います。
 
 ---
 
