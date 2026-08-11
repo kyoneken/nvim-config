@@ -96,7 +96,7 @@ Tree-sitterのハイライトはNeovim同梱のパーサーだけを使います
 | 目的 | キー |
 |---|---|
 | テスト実行 | `<Space>ct` |
-| カーソル位置の `Test...` 関数テスト（Go parser不要） | `<Space>cT` |
+| カーソル位置の `Test...` 関数テスト（gopls使用、Go parser不要） | `<Space>cT` |
 | 実行 | `<Space>cr` |
 | ビルド | `<Space>cb` |
 | import追加 | `<Space>ci` |

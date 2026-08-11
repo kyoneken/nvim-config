@@ -79,24 +79,56 @@ keymap.set("n", "<leader>dq", vim.diagnostic.setloclist, { desc = "診断をQuic
 -- Go開発操作 (<leader>c - code)
 keymap.set("n", "<leader>ct", "<cmd>GoTest<CR>", { desc = "[Go] テスト実行" })
 keymap.set("n", "<leader>cT", function()
-  local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
-  local lines = vim.api.nvim_buf_get_lines(0, 0, cursor_line, false)
+  if vim.bo.filetype ~= "go" then
+    vim.notify("Go ファイルでのみ実行できます", vim.log.levels.WARN)
+    return
+  end
 
-  for line_number = cursor_line, 1, -1 do
-    local line = lines[line_number]
-    if line:match("^%s*func%s") then
-      local test_name = line:match("^%s*func%s+(Test[A-Z0-9_][%w_]*)%s*%(")
-      if not test_name then
-        vim.notify("カーソルは Go のテスト関数内にありません", vim.log.levels.WARN)
-        return
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local position = { line = cursor[1] - 1, character = cursor[2] }
+  local params = { textDocument = vim.lsp.util.make_text_document_params(0) }
+  local responses = vim.lsp.buf_request_sync(0, "textDocument/documentSymbol", params, 1500)
+  local test_symbol
+
+  local function contains(range)
+    if position.line < range.start.line or position.line > range["end"].line then
+      return false
+    end
+    if position.line == range.start.line and position.character < range.start.character then
+      return false
+    end
+    if position.line == range["end"].line and position.character >= range["end"].character then
+      return false
+    end
+    return true
+  end
+
+  local function visit(symbols)
+    for _, symbol in ipairs(symbols or {}) do
+      local range = symbol.range or (symbol.location and symbol.location.range)
+      if
+        symbol.kind == vim.lsp.protocol.SymbolKind.Function
+        and symbol.name:match("^Test[A-Z0-9_][%w_]*$")
+        and range
+        and contains(range)
+      then
+        test_symbol = symbol
       end
-
-      require("go.gotest").test_package("-r", "^" .. test_name .. "$")
-      return
+      visit(symbol.children)
     end
   end
 
-  vim.notify("Go のテスト関数が見つかりません", vim.log.levels.WARN)
+  for _, response in pairs(responses or {}) do
+    visit(response.result)
+  end
+
+  if not test_symbol then
+    vim.notify("カーソル位置の Go テスト関数を gopls から取得できません", vim.log.levels.WARN)
+    return
+  end
+
+  local gotest = require("go.gotest")
+  gotest.test("-r", "^" .. test_symbol.name .. "$", gotest.get_test_path())
 end, { desc = "[Go] 関数テスト" })
 keymap.set("n", "<leader>cc", "<cmd>GoCoverage<CR>", { desc = "[Go] カバレッジ" })
 keymap.set("n", "<leader>cr", "<cmd>GoRun<CR>", { desc = "[Go] 実行" })
