@@ -6,7 +6,7 @@
 return {
   "jmbuhr/otter.nvim",
   dependencies = {
-    "nvim-treesitter/nvim-treesitter",
+    "neovim-treesitter/nvim-treesitter",
   },
   ft = { "toml" },
   config = function()

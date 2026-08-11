@@ -9,7 +9,6 @@ return {
     dependencies = {
       "ray-x/guihua.lua",
       "neovim/nvim-lspconfig",
-      "nvim-treesitter/nvim-treesitter",
     },
     config = function()
       require("go").setup({
@@ -34,7 +33,7 @@ return {
         build_tags = "",
         
         -- その他設定
-        textobjects = true,
+        textobjects = false,
         icons = { breakpoint = "🔴", currentpos = "🔵" },
         trouble = false,
         luasnip = true,
