@@ -63,7 +63,6 @@ mise use -g aqua:neovim/neovim@latest
 mise use -g aqua:BurntSushi/ripgrep@latest
 mise use -g aqua:sharkdp/fd@latest
 mise use -g aqua:jesseduffield/lazygit@latest
-mise use -g aqua:tree-sitter/tree-sitter@latest
 ```
 
 Neovim設定は通常さまざまなプロジェクトから使うため、CLI依存はプロジェクトローカルではなくグローバルなmise設定に入れるのがおすすめです。
@@ -72,7 +71,7 @@ Homebrewを使う場合:
 
 ```bash
 # Neovimと依存ツール
-brew install neovim git node ripgrep fd lazygit tree-sitter
+brew install neovim git node ripgrep fd lazygit
 
 # Nerd Font（例: JetBrains Mono）
 brew install --cask font-jetbrains-mono-nerd-font
@@ -90,14 +89,14 @@ brew install --cask font-jetbrains-mono-nerd-font
 
 初回起動後に `:Mason` または `:Lazy sync` を実行すると、Mason管理のLSPが自動インストールされます。
 
-SwiftのTreesitter parserは環境によって `tree-sitter` CLI が必要になるため、自動インストール対象から外しています。Swiftの詳細なTreesitterハイライトも使いたい場合は、`mise use -g aqua:tree-sitter/tree-sitter@latest` または `brew install tree-sitter` 後にNeovimで `:TSInstall swift` を実行してください。
+Tree-sitterのハイライトはNeovim同梱のパーサーだけを使います。C、Lua、Markdown、`markdown_inline`（Markdownインライン）、Query、Vim、Vim helpで有効になり、外部言語はLSPと通常のsyntax supportにフォールバックします。外部パーサーのインストールは不要です。
 
 ### Go向け操作
 
 | 目的 | キー |
 |---|---|
 | テスト実行 | `<Space>ct` |
-| カーソル位置の関数テスト | `<Space>cT` |
+| カーソル位置の `Test...` 関数テスト（gopls使用、Go parser不要） | `<Space>cT` |
 | 実行 | `<Space>cr` |
 | ビルド | `<Space>cb` |
 | import追加 | `<Space>ci` |
@@ -160,7 +159,6 @@ nvim
 │   │   └── autocmds.lua        # オプション: 自動コマンド
 │   └── plugins/                # 必須: プラグイン設定
 │       ├── colorscheme.lua     # 推奨: カラースキーム
-│       ├── treesitter.lua      # 推奨: シンタックスハイライト
 │       ├── lsp.lua             # 推奨: LSP機能
 │       ├── cmp.lua             # 推奨: 補完
 │       ├── telescope.lua       # 推奨: ファイル検索
@@ -209,7 +207,6 @@ Copilotを使う場合は、GitHub公式手順に従ってNeovim内で認証し�
 │   │   └── autocmds.lua              # 自動コマンド
 │   └── plugins/                      # プラグイン設定
 │       ├── colorscheme.lua           # カラースキーム
-│       ├── treesitter.lua            # シンタックスハイライト
 │       ├── lsp.lua                   # LSP設定
 │       ├── cmp.lua                   # 補完設定
 │       ├── telescope.lua             # ファジーファインダー
@@ -304,7 +301,6 @@ return {
 
 ### コア機能
 - [lazy.nvim](https://github.com/folke/lazy.nvim) - プラグインマネージャー
-- [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) - シンタックスハイライト
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) - ファジーファインダー
 - [harpoon](https://github.com/ThePrimeagen/harpoon) - 作業中ファイルの高速移動
 - [mason.nvim](https://github.com/williamboman/mason.nvim) - LSPサーバー管理
@@ -352,26 +348,6 @@ return {
 :Copilot setup
 :Copilot status
 ```
-
-### Swift Treesitterでtree-sitter CLIエラーが出る場合
-
-SwiftのTreesitter parserは自動インストール対象から外しています。手動で `:TSInstall swift` した場合に `tree-sitter CLI not found` が出るときは、次を実行してください。
-
-miseを使う場合:
-
-```bash
-mise use -g aqua:tree-sitter/tree-sitter@latest
-```
-
-Homebrewを使う場合:
-
-```bash
-brew install tree-sitter
-```
-
-Swift parserが不要なら `:TSUninstall swift` で外せます。Swiftの補完や定義ジャンプは `sourcekit-lsp` 側で動くため、Treesitter Swiftは必須ではありません。
-
-詳細は [`doc/basic-usage.md`](doc/basic-usage.md#トラブルシューティング) を参照してください。
 
 ## 📚 ドキュメント
 

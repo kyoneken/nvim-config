@@ -40,7 +40,6 @@
 │   │   └── autocmds.lua              # 自動コマンド
 │   └── plugins/                      # プラグイン設定
 │       ├── colorscheme.lua           # カラースキーム
-│       ├── treesitter.lua            # シンタックスハイライト
 │       ├── lsp.lua                   # LSP設定
 │       ├── cmp.lua                   # 補完設定
 │       ├── telescope.lua             # ファジーファインダー
@@ -51,6 +50,12 @@
 │       └── utils.lua                 # その他便利プラグイン
 └── pack/                             # 旧vim-plug形式プラグイン（未使用）
 ```
+
+---
+
+## Tree-sitter
+
+Tree-sitterは外部プラグインを使わず、Neovim本体の機能として設定しています。`lua/config/autocmds.lua` で同梱パーサー（C、Lua、Markdown、`markdown_inline`（Markdownインライン）、Query、Vim、Vim help）に対してハイライトを有効にし、`lua/config/keymaps.lua` で構文ノードの拡張・縮小選択キーマップを設定しています。外部言語はLSPと通常のsyntax supportを使います。
 
 ---
 
@@ -99,7 +104,6 @@ nvim
 
 ### コア機能
 - **lazy.nvim** - プラグインマネージャー
-- **nvim-treesitter** - 高度なシンタックスハイライト
 - **telescope.nvim** - ファジーファインダー
 - **mason.nvim** - LSPサーバー管理
 - **nvim-lspconfig** - LSP設定

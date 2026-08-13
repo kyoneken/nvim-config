@@ -78,7 +78,64 @@ keymap.set("n", "<leader>dq", vim.diagnostic.setloclist, { desc = "診断をQuic
 
 -- Go開発操作 (<leader>c - code)
 keymap.set("n", "<leader>ct", "<cmd>GoTest<CR>", { desc = "[Go] テスト実行" })
-keymap.set("n", "<leader>cT", "<cmd>GoTestFunc<CR>", { desc = "[Go] 関数テスト" })
+keymap.set("n", "<leader>cT", function()
+  if vim.bo.filetype ~= "go" then
+    vim.notify("Go ファイルでのみ実行できます", vim.log.levels.WARN)
+    return
+  end
+
+  local cursor = vim.api.nvim_win_get_cursor(0)
+  local cursor_line = vim.api.nvim_get_current_line()
+  local params = { textDocument = vim.lsp.util.make_text_document_params(0) }
+  local responses = vim.lsp.buf_request_sync(0, "textDocument/documentSymbol", params, 1500)
+  local test_symbol
+
+  local function contains(range, position)
+    if position.line < range.start.line or position.line > range["end"].line then
+      return false
+    end
+    if position.line == range.start.line and position.character < range.start.character then
+      return false
+    end
+    if position.line == range["end"].line and position.character >= range["end"].character then
+      return false
+    end
+    return true
+  end
+
+  local function visit(symbols, position)
+    for _, symbol in ipairs(symbols or {}) do
+      local range = symbol.range or (symbol.location and symbol.location.range)
+      if
+        symbol.kind == vim.lsp.protocol.SymbolKind.Function
+        and symbol.name:match("^Test[A-Z0-9_][%w_]*$")
+        and range
+        and contains(range, position)
+      then
+        test_symbol = symbol
+      end
+      visit(symbol.children, position)
+    end
+  end
+
+  for client_id, response in pairs(responses or {}) do
+    local client = vim.lsp.get_client_by_id(client_id)
+    local encoding = client and client.offset_encoding or "utf-16"
+    local position = {
+      line = cursor[1] - 1,
+      character = vim.str_utfindex(cursor_line, encoding, cursor[2], false),
+    }
+    visit(response.result, position)
+  end
+
+  if not test_symbol then
+    vim.notify("カーソル位置の Go テスト関数を gopls から取得できません", vim.log.levels.WARN)
+    return
+  end
+
+  local gotest = require("go.gotest")
+  gotest.test("-r", "^" .. test_symbol.name .. "$", gotest.get_test_path())
+end, { desc = "[Go] 関数テスト" })
 keymap.set("n", "<leader>cc", "<cmd>GoCoverage<CR>", { desc = "[Go] カバレッジ" })
 keymap.set("n", "<leader>cr", "<cmd>GoRun<CR>", { desc = "[Go] 実行" })
 keymap.set("n", "<leader>cb", "<cmd>GoBuild<CR>", { desc = "[Go] ビルド" })
@@ -104,3 +161,11 @@ keymap.set("n", "<leader>x", "<cmd>bd<CR>", { desc = "バッファ削除" })
 
 -- Lazy (プラグインマネージャー)
 keymap.set("n", "<leader>L", "<cmd>Lazy<CR>", { desc = "Lazy UI" })
+
+keymap.set({ "n", "x" }, "<C-space>", function()
+  vim.treesitter.select("parent")
+end, { desc = "構文ノードを拡張選択" })
+
+keymap.set("x", "<BS>", function()
+  vim.treesitter.select("child")
+end, { desc = "構文ノードの選択を縮小" })
