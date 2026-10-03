@@ -35,3 +35,6 @@ spell/
 # その他
 coc-settings.json.backup
 .worktrees/
+
+# Release 用にローカルで作った zip
+dist/
