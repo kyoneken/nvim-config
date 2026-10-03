@@ -54,7 +54,11 @@ nvim <フォルダ>
 
 対象は Swift、Python、Go、JavaScript / TypeScript、Kotlin。加えて Lua、Rust、Bash、JSON、YAML。
 
-Neovim 0.12 以上。パーサーを入れるには `tree-sitter` CLI 0.26 以上と C コンパイラ。
+Neovim 0.12 以上。パーサーを入れるには `tree-sitter` コマンド 0.26 以上と C コンパイラ。Homebrew ではそのコマンドは `tree-sitter-cli` から入る。`tree-sitter` という formula はライブラリだけで、コマンドは入らない。
+
+```bash
+brew install tree-sitter-cli
+```
 
 ```bash
 git clone https://github.com/kyoneken/nvim-config.git ~/.config/nvim
