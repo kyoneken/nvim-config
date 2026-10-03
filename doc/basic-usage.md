@@ -52,7 +52,7 @@ fzf の中では `Enter` で開く。`Esc` で閉じる。
 | `gra` / `<Space>la` | コードアクション |
 | `<Space>lf` | フォーマット |
 | `[d` / `]d` | 前 / 次の診断 |
-| `<Space>dq` | 診断を Quickfix へ |
+| `<Space>dq` | 診断をロケーションリストへ（`:lopen`） |
 
 補完は組み込み。候補が出たら `Ctrl-y` で確定、`Ctrl-n` / `Ctrl-p` で移動、`Ctrl-e` で閉じる。
 

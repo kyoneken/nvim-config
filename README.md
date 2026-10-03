@@ -21,7 +21,7 @@
 | `<Space>lf` | フォーマット |
 | `<Space>li` | LSP の状態 |
 | `[d` / `]d` | 前 / 次の診断 |
-| `<Space>dq` | 診断を Quickfix へ |
+| `<Space>dq` | 診断をロケーションリストへ（`:lopen`） |
 | `]c` / `[c` | 次 / 前の変更（gitsigns） |
 | `<Space>hs` / `<Space>hr` | 変更をステージ / 戻す |
 | `<Space>hp` | 変更をプレビュー |
@@ -54,10 +54,10 @@ nvim <フォルダ>
 
 対象は Swift、Python、Go、JavaScript / TypeScript、Kotlin。加えて Lua、Rust、Bash、JSON、YAML。
 
-Neovim 0.12 以上。パーサーを入れるには `tree-sitter` コマンド 0.26 以上と C コンパイラ。Homebrew ではそのコマンドは `tree-sitter-cli` から入る。`tree-sitter` という formula はライブラリだけで、コマンドは入らない。
+Neovim 0.12 以上。`<Space>ff` と `<Space>fg` には `fzf` と `ripgrep` が PATH にあること。パーサーを入れるには `tree-sitter` コマンド 0.26 以上と C コンパイラ。Homebrew ではそのコマンドは `tree-sitter-cli` から入る。`tree-sitter` という formula はライブラリだけで、コマンドは入らない。
 
 ```bash
-brew install tree-sitter-cli
+brew install fzf ripgrep tree-sitter-cli
 ```
 
 ```bash
