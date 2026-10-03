@@ -100,7 +100,7 @@ G  - ファイルの末尾へ
 :e ~/.config/nvim/init.lua
 ```
 
-#### 方法2: Telescope（推奨）
+#### 方法2: ファイル名（fzf-lua）
 ```
 <Space>ff  （ファイル名で検索）
 ```

@@ -2,7 +2,20 @@
 
 All notable changes to this Neovim configuration will be documented in this file.
 
+現行のキーは README を参照。2.0.0 より下は、その時点の履歴。
+
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+## [3.0.0] - 2026-10-03
+
+日常で使う範囲だけ残した。
+
+- ファイル名と grep は fzf-lua（`<Space>ff` / `<Space>fg`）
+- `nvim .` と `nvim <フォルダ>` は oil.nvim
+- ハイライトは `vim.treesitter` と nvim-treesitter（main）
+- LSP は Neovim 組み込みと nvim-lspconfig。補完も組み込み
+- Copilot、CopilotChat、Telescope、Neo-tree、nvim-cmp、Mason、Harpoon、go.nvim、DAP、LazyGit、Fugitive などは削除
+- Git の表示は gitsigns のみ。色は tokyonight
 
 ## [2.0.0] - 2025-11-29
 

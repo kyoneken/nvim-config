@@ -1,15 +1,5 @@
-# 第4章: 検索とファイル操作 🔍
+# 第4章: 検索とフォルダ
 
-**Status**: 🚧 作成中
+ファイル名は `<Space>ff`、文字列は `<Space>fg`（fzf-lua）。`Enter` で開き、`Esc` で閉じる。
 
-Telescope、Neo-tree、高度な検索テクニックを学びます。
-
-## 学習予定内容
-
-- Telescopeの全機能
-- Neo-treeの使いこなし
-- 複数ファイルの編集
-- QuickFixリスト
-- 置換（substitute）
-
-**Coming Soon!**
+フォルダは `nvim .` か `nvim <フォルダ>` で oil が開く。`Enter` で中へ、`-` で親へ。開いているファイルから `-` でも、そのディレクトリに戻れる。

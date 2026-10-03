@@ -46,7 +46,7 @@ opt.sidescrolloff = 8     -- カーソルの左右に表示する最小列数
 
 -- UI設定
 opt.termguicolors = true  -- True color対応
-opt.showmode = false      -- モード表示を無効化（ステータスラインで表示）
+opt.showmode = true       -- モード表示（ステータスラインプラグインは使わない）
 opt.showcmd = true        -- コマンドを表示
 opt.cmdheight = 1         -- コマンドラインの高さ
 opt.laststatus = 3        -- グローバルステータスライン
@@ -58,7 +58,7 @@ opt.updatetime = 250      -- CursorHoldイベントの発火時間
 opt.timeoutlen = 300      -- キーマッピングのタイムアウト時間
 
 -- 補完設定
-opt.completeopt = { "menu", "menuone", "noselect" }
+opt.completeopt = { "menu", "menuone", "noselect", "popup" }
 opt.pumheight = 10        -- ポップアップメニューの最大高さ
 
 -- 構文ハイライト

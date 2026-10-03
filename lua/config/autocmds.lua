@@ -9,7 +9,13 @@ local augroup = vim.api.nvim_create_augroup
 autocmd("BufWritePre", {
   group = augroup("TrimWhitespace", { clear = true }),
   pattern = "*",
-  command = [[%s/\s\+$//e]],
+  callback = function(event)
+    local bo = vim.bo[event.buf]
+    if bo.buftype ~= "" or not bo.modifiable or bo.filetype == "oil" then
+      return
+    end
+    vim.cmd([[keeppatterns %s/\s\+$//e]])
+  end,
 })
 
 -- ヤンク時にハイライト
@@ -44,39 +50,17 @@ autocmd("TermOpen", {
   end,
 })
 
--- LSPアタッチ時のキーマップ
+-- LSPアタッチ時: 組み込み補完と、標準マップにない定義ジャンプ
 autocmd("LspAttach", {
   group = augroup("LspKeymaps", { clear = true }),
   callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
     local opts = { buffer = ev.buf, silent = true }
-    
-    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-    vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-    vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-    vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-  end,
-})
 
-local bundled_treesitter_parsers = {
-  c = true,
-  lua = true,
-  markdown = true,
-  markdown_inline = true,
-  query = true,
-  vim = true,
-  vimdoc = true,
-}
-
-autocmd("FileType", {
-  group = augroup("NvimCoreTreesitter", { clear = true }),
-  callback = function(event)
-    local lang = vim.treesitter.language.get_lang(vim.bo[event.buf].filetype)
-    if lang and bundled_treesitter_parsers[lang] and vim.treesitter.language.add(lang) then
-      vim.treesitter.start(event.buf, lang)
+    if client and client:supports_method("textDocument/completion") then
+      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
     end
   end,
 })
