@@ -1,5 +1,9 @@
 # Tree-sitter移行設計
 
+> 廃止。現行は Neovim の `vim.treesitter` と公式 `nvim-treesitter`（main）だけでハイライトする。この文書の手順には従わない。README を参照。
+
+
+
 ## 目的
 
 アーカイブされた `nvim-treesitter/nvim-treesitter` とそのローカル生成物を廃止し、Neovim 0.12標準のTree-sitter APIを中心とした構成へ移行する。外部言語のparserとqueryだけは、後継の `neovim-treesitter/nvim-treesitter` とcommunity registryで管理する。

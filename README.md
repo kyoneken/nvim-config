@@ -1,398 +1,64 @@
-# Neovim Configuration
+# Neovim 設定
 
-モダンで高性能なNeovim設定 - 2026年版
+ファイルを名前で開く、フォルダをエクスプローラーで開く、シンタックスハイライト、LSP。
 
-![Neovim](https://img.shields.io/badge/Neovim-0.11+-green.svg)
-![Lua](https://img.shields.io/badge/Lua-5.1+-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-orange.svg)
+リーダーは `<Space>`。
 
-## ✨ 特徴
+## キー
 
-- 🚀 **高速起動**: lazy.nvimによる最適化された遅延読み込み
-- 🎨 **モダンUI**: TokyoNight + Lualine + Noice.nvim
-- 💡 **多言語LSP**: Swift / Python / Go / JavaScript / TypeScript / Kotlin を中心にした統合開発環境
-- 🌳 **Treesitter**: AST基盤の高度なシンタックスハイライト
-- 🔍 **巨大リポジトリ対応検索**: Telescope + ripgrepでGit管理ファイル検索と全文検索を使い分け
-- 🤖 **AI支援**: 公式GitHub Copilot + CopilotChat（日本語対応）
-- 🐙 **Git統合**: LazyGit + Gitsigns + Fugitive + conflict解決UI
-- 🧭 **高速移動**: Bufferline + Telescope + Harpoonで作業中ファイルを素早く往復
-- 📚 **完全日本語**: ドキュメントとUI表示が日本語
+| キー | 動作 |
+| --- | --- |
+| `<Space>ff` | ファイル名で開く（fzf-lua） |
+| `<Space>fg` | 文字列検索（fzf-lua、ripgrep） |
+| `-` | 今のファイルのディレクトリを開く（oil） |
+| `gd` | 定義へ |
+| `K` | ホバー |
+| `grr` | 参照 |
+| `grn` | リネーム |
+| `gra` | コードアクション |
+| `<Space>lr` | リネーム |
+| `<Space>la` | コードアクション |
+| `<Space>lf` | フォーマット |
+| `<Space>li` | LSP の状態 |
+| `[d` / `]d` | 前 / 次の診断 |
+| `<Space>dq` | 診断を Quickfix へ |
+| `]c` / `[c` | 次 / 前の変更（gitsigns） |
+| `<Space>hs` / `<Space>hr` | 変更をステージ / 戻す |
+| `<Space>hp` | 変更をプレビュー |
+| `<Space>hb` / `<Space>hd` | blame / diff |
+| `<Space>w` / `<Space>q` | 保存 / 閉じる |
+| `<Space>x` | バッファを閉じる |
+| `Shift-h` / `Shift-l` | 前 / 次のバッファ |
+| `Ctrl-h/j/k/l` | ウィンドウ移動 |
+| `Ctrl-Space` / `Backspace`（選択中） | 構文ノードを広げる / 戻す |
 
-## 🧭 まず覚える操作
+補完は Neovim 組み込み。メニューが出たら `Ctrl-y` で確定する。`Ctrl-e` で閉じる。
 
-日常的にはこのあたりだけで十分回せます。
-
-| 目的 | キー | 補足 |
-|---|---|---|
-| Git管理ファイルを探す | `<Space>fp` | 大きいリポジトリではまずこれ |
-| すべてのファイルを探す | `<Space>ff` | hidden fileも対象。除外設定あり |
-| 文字列検索 | `<Space>fg` | `rg` ベースの全文検索 |
-| 開いているファイルへ戻る | `<Space>fb` | バッファ一覧 |
-| 前後のバッファへ移動 | `Shift-h` / `Shift-l` | 直近の複数ファイル移動に便利 |
-| よく使うファイルを登録 | `<Space>ha` | Harpoonに追加 |
-| 登録ファイルへ移動 | `<Space>1`〜`<Space>4` | 作業中の主要ファイルへ即移動 |
-| Git UIを開く | `<Space>gg` | LazyGit |
-| AIチャットを開く | `<Space>aa` | CopilotChat |
-
-おすすめの流れは、`<Space>fp` でファイルを開き、よく行き来するものを `<Space>ha` で登録し、以後は `<Space>1`〜`<Space>4` や `Shift-h` / `Shift-l` で移動する使い方です。
-
-## 📋 必要要件
-
-- Neovim >= 0.11.0
-- Git
-- Node.js 18以上（Copilot用）
-- ripgrep（Telescopeの検索用）
-- fd（オプション、Telescopeの高速ファイル検索用）
-- [Nerd Font](https://www.nerdfonts.com/)（アイコン表示用）
-- LazyGit（オプション、Git操作用）
-- Swift: XcodeまたはSwift toolchain（`sourcekit-lsp`）
-- Python: Python実行環境
-- Go: Go toolchain
-- JS/TS: Node.js/npm/pnpmなど
-- Kotlin: JDK + Gradle
-
-Swift開発ではXcodeまたはSwift toolchainに含まれる `sourcekit-lsp` を使います。Python/Go/JS/TS/KotlinのLSPはMason経由で導入されます。
-
-### macOSでのインストール
-
-miseを使う場合:
+## フォルダを開く
 
 ```bash
-mise use -g node@22
-mise use -g aqua:neovim/neovim@latest
-mise use -g aqua:BurntSushi/ripgrep@latest
-mise use -g aqua:sharkdp/fd@latest
-mise use -g aqua:jesseduffield/lazygit@latest
+nvim .
+nvim <フォルダ>
 ```
 
-Neovim設定は通常さまざまなプロジェクトから使うため、CLI依存はプロジェクトローカルではなくグローバルなmise設定に入れるのがおすすめです。
+そのフォルダを oil.nvim で開く。`Enter` でファイルか中のフォルダを開き、`-` で親へ戻る。ファイルを開いているときに `-` を押すと、そのファイルがあるディレクトリに戻り、別のファイルへ移れる。
 
-Homebrewを使う場合:
+## 入っているもの
 
-```bash
-# Neovimと依存ツール
-brew install neovim git node ripgrep fd lazygit
+- 検索: fzf-lua（`fzf` と `ripgrep`）
+- エクスプローラー: oil.nvim
+- ハイライト: `vim.treesitter` と nvim-treesitter（main）
+- LSP: Neovim 組み込みと nvim-lspconfig。言語サーバーは PATH に置く
+- Git の差分: gitsigns のみ
+- 色: tokyonight
 
-# Nerd Font（例: JetBrains Mono）
-brew install --cask font-jetbrains-mono-nerd-font
-```
+対象は Swift、Python、Go、JavaScript / TypeScript、Kotlin。加えて Lua、Rust、Bash、JSON、YAML。
 
-## 💻 対応言語
-
-| 言語 | LSP / 補助 | 備考 |
-|---|---|---|
-| Swift | `sourcekit-lsp` | Xcode / Swift toolchain側で提供 |
-| Python | Pyright | Masonで導入 |
-| Go | gopls + go.nvim | テスト、実行、タグ追加などのGo操作あり |
-| JavaScript / TypeScript | ts_ls + ESLint | `package.json` / `tsconfig.json` をroot検出に利用 |
-| Kotlin | kotlin-language-server | Gradle系ファイルをroot検出に利用 |
-
-初回起動後に `:Mason` または `:Lazy sync` を実行すると、Mason管理のLSPが自動インストールされます。
-
-Tree-sitterのハイライトはNeovim同梱のパーサーだけを使います。C、Lua、Markdown、`markdown_inline`（Markdownインライン）、Query、Vim、Vim helpで有効になり、外部言語はLSPと通常のsyntax supportにフォールバックします。外部パーサーのインストールは不要です。
-
-### Go向け操作
-
-| 目的 | キー |
-|---|---|
-| テスト実行 | `<Space>ct` |
-| カーソル位置の `Test...` 関数テスト（gopls使用、Go parser不要） | `<Space>cT` |
-| 実行 | `<Space>cr` |
-| ビルド | `<Space>cb` |
-| import追加 | `<Space>ci` |
-| struct補完 | `<Space>cf` |
-| if err補完 | `<Space>ce` |
-| テストファイル切替 | `<Space>ca` |
-| JSONタグ追加 | `<Space>cj` |
-| YAMLタグ追加 | `<Space>cy` |
-
-## 🚀 インストール
-
-### 方法1: Git Clone（推奨）
+Neovim 0.12 以上。パーサーを入れるには `tree-sitter` CLI 0.26 以上と C コンパイラ。
 
 ```bash
-# 既存の設定をバックアップ（存在する場合）
-mv ~/.config/nvim ~/.config/nvim.backup
-
-# このリポジトリをクローン
-git clone <your-repo-url> ~/.config/nvim
-
-# Neovimを起動（プラグインが自動インストールされます）
+git clone https://github.com/kyoneken/nvim-config.git ~/.config/nvim
 nvim
 ```
 
-**メリット**: 
-- 更新が簡単（`git pull`で最新版を取得可能）
-- バージョン管理が容易
-
-### 方法2: ファイルダウンロード
-
-Gitを使わずにインストールする場合:
-
-```bash
-# 既存の設定をバックアップ（存在する場合）
-mv ~/.config/nvim ~/.config/nvim.backup
-
-# 設定ディレクトリを作成
-mkdir -p ~/.config/nvim/lua/config ~/.config/nvim/lua/plugins
-
-# GitHubからZIPファイルをダウンロードして展開
-# （ブラウザでダウンロードするか、以下のコマンドを使用）
-curl -L <your-repo-url>/archive/refs/heads/main.zip -o nvim-config.zip
-unzip nvim-config.zip
-mv nvim-config-main/* ~/.config/nvim/
-rm -rf nvim-config.zip nvim-config-main
-
-# Neovimを起動（プラグインが自動インストールされます）
-nvim
-```
-
-**最低限必要なファイル・ディレクトリ**:
-```
-~/.config/nvim/
-├── init.lua                    # 必須: メインエントリーポイント
-├── lua/
-│   ├── config/                 # 必須: 基本設定
-│   │   ├── lazy.lua            # 必須: プラグインマネージャー
-│   │   ├── options.lua         # 必須: Vim基本設定
-│   │   ├── keymaps.lua         # 推奨: キーマッピング
-│   │   └── autocmds.lua        # オプション: 自動コマンド
-│   └── plugins/                # 必須: プラグイン設定
-│       ├── colorscheme.lua     # 推奨: カラースキーム
-│       ├── lsp.lua             # 推奨: LSP機能
-│       ├── cmp.lua             # 推奨: 補完
-│       ├── telescope.lua       # 推奨: ファイル検索
-│       └── ... (その他)        # オプション: 各種プラグイン
-```
-
-**メリット**: 
-- Gitのインストール不要
-- シンプルな手順
-
-**デメリット**: 
-- 更新時は手動で再ダウンロードが必要
-
-### 既存環境からの移行
-
-1. 既存の設定をバックアップ
-2. 上記いずれかの方法でインストール
-3. 初回起動でlazy.nvimがプラグインをインストール
-
-### 初回起動後にやること
-
-```vim
-:Lazy sync
-:Mason
-:checkhealth
-```
-
-Copilotを使う場合は、GitHub公式手順に従ってNeovim内で認証します。
-
-```vim
-:Copilot setup
-:Copilot enable
-```
-
-## 📂 ディレクトリ構造
-
-```
-~/.config/nvim/
-├── init.lua                          # メインエントリーポイント
-├── copilot-instructions.md           # Copilot向けの指示
-├── lua/
-│   ├── config/                       # 基本設定
-│   │   ├── lazy.lua                  # lazy.nvimブートストラップ
-│   │   ├── options.lua               # Vimオプション設定
-│   │   ├── keymaps.lua               # キーマッピング
-│   │   └── autocmds.lua              # 自動コマンド
-│   └── plugins/                      # プラグイン設定
-│       ├── colorscheme.lua           # カラースキーム
-│       ├── lsp.lua                   # LSP設定
-│       ├── cmp.lua                   # 補完設定
-│       ├── telescope.lua             # ファジーファインダー
-│       ├── neo-tree.lua              # ファイルエクスプローラー
-│       ├── git.lua                   # Git統合
-│       ├── ui.lua                    # UI関連
-│       ├── copilot.lua               # Copilot設定
-│       └── utils.lua                 # その他便利プラグイン
-└── doc/                              # ドキュメント
-    ├── README.md                     # ドキュメント目次
-    └── basic-usage.md                # 基本操作ガイド
-```
-
-## 🎮 基本操作
-
-### リーダーキー
-`<Space>` がリーダーキーです。
-
-### よく使うキーバインド
-
-#### ファイル操作
-- `<Space>ff` - ファイル検索
-- `<Space>fp` - Git管理ファイル検索（巨大リポジトリではまずこちら）
-- `<Space>fg` - テキスト検索
-- `<Space>fb` - バッファ一覧
-- `<Space>fr` - 最近使ったファイル
-- `<Space>e` - ファイルツリー
-
-巨大なプロジェクトでは `<Space>fp` を優先してください。`git ls-files` ベースでGit管理ファイルに絞るため、`node_modules` やビルド成果物が多い環境でも扱いやすくなります。未管理ファイルや隠しファイルも含めて探したいときは `<Space>ff` を使います。
-
-#### 複数ファイル移動
-- `Shift-h` / `Shift-l` - 前/次のバッファへ移動
-- `<Space>fb` - 開いているバッファから選ぶ
-- `<Space>ha` - 今のファイルをHarpoonに追加
-- `<Space>hh` - Harpoon一覧
-- `<Space>1`〜`<Space>4` - Harpoon登録ファイルへ即移動
-
-#### Git操作
-- `<Space>gg` - LazyGit起動
-- `<Space>hp` - 変更箇所プレビュー
-- `<Space>hs` - Hunkをステージ
-- `]c` / `[c` - 次/前の変更箇所へ
-- `]x` / `[x` - 次/前のコンフリクトへ
-- `<Space>gco` - conflictでoursを採用
-- `<Space>gct` - conflictでtheirsを採用
-- `<Space>gcb` - conflictでbothを採用
-- `<Space>gcq` - conflict一覧をQuickfixに表示
-
-#### LSP機能
-- `gd` - 定義へジャンプ
-- `gr` - 参照を表示
-- `K` - ホバー情報
-- `<Space>lr` - リネーム
-- `<Space>la` - コードアクション
-- `<Space>lf` - フォーマット
-
-#### Copilot
-- `Tab` - inline suggestionを受け入れ
-- `Alt-l` - inline suggestionを受け入れ（代替）
-- `Alt-]` / `Alt-[` - 次/前の提案
-- `Ctrl-e` - 提案を閉じる
-- `<Space>aa` - チャット切替
-- `<Space>ae` - コード説明（選択後）
-- `<Space>ar` - コードレビュー（選択後）
-- `<Space>af` - バグ修正（選択後）
-
-初回利用時は公式手順に従い、Neovim内で `:Copilot setup` を実行してGitHub認証を行います。必要に応じて `:Copilot enable` で有効化できます。
-
-詳細は [`doc/basic-usage.md`](doc/basic-usage.md) を参照してください。
-
-## 🔧 カスタマイズ
-
-### オプション設定
-`lua/config/options.lua` で基本オプションを変更できます。
-
-### キーマップ追加
-`lua/config/keymaps.lua` にカスタムキーマップを追加できます。
-
-### プラグイン追加
-`lua/plugins/` 内に新しいファイルを作成し、lazy.nvim形式で定義します:
-
-```lua
-return {
-  "author/plugin-name",
-  config = function()
-    -- 設定
-  end,
-}
-```
-
-## 📦 主要プラグイン
-
-### コア機能
-- [lazy.nvim](https://github.com/folke/lazy.nvim) - プラグインマネージャー
-- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) - ファジーファインダー
-- [harpoon](https://github.com/ThePrimeagen/harpoon) - 作業中ファイルの高速移動
-- [mason.nvim](https://github.com/williamboman/mason.nvim) - LSPサーバー管理
-- [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) - LSP設定
-- [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) - 補完エンジン
-
-### UI/UX
-- [tokyonight.nvim](https://github.com/folke/tokyonight.nvim) - カラースキーム
-- [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim) - ステータスライン
-- [neo-tree.nvim](https://github.com/nvim-neo-tree/neo-tree.nvim) - ファイルエクスプローラー
-- [which-key.nvim](https://github.com/folke/which-key.nvim) - キーバインドヘルパー
-- [noice.nvim](https://github.com/folke/noice.nvim) - モダンUI
-
-### Git
-- [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim) - Git差分表示
-- [vim-fugitive](https://github.com/tpope/vim-fugitive) - Git操作
-- [lazygit.nvim](https://github.com/kdheepak/lazygit.nvim) - LazyGit統合
-- [git-conflict.nvim](https://github.com/akinsho/git-conflict.nvim) - conflict解決UI
-
-### AI
-- [copilot.vim](https://github.com/github/copilot.vim) - GitHub Copilot公式Vim/Neovimプラグイン
-- [CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim) - AIチャット
-
-完全なリストは [`doc/README.md`](doc/README.md) を参照してください。
-
-## 🐛 トラブルシューティング
-
-### 健全性チェック
-```vim
-:checkhealth
-```
-
-### プラグインの同期
-```vim
-:Lazy sync
-```
-
-### LSPサーバーの管理
-```vim
-:Mason
-```
-
-### Copilot認証
-```vim
-:Copilot setup
-:Copilot status
-```
-
-## 📚 ドキュメント
-
-- [基本操作ガイド](doc/basic-usage.md) - 包括的な使い方マニュアル
-- [ドキュメント目次](doc/README.md) - 設定ファイル構造とプラグイン一覧
-- [変更履歴](CHANGELOG.md) - バージョン履歴と変更内容
-
-## 🎓 初心者向けチュートリアル
-
-Neovimの基礎から高度な機能まで、段階的に学べる7章構成のチュートリアルを用意しています。
-
-**[📖 チュートリアルを始める](tutorials/README.md)**
-
-### 学習の流れ
-
-| 章 | タイトル | 難易度 | 状態 |
-|----|---------|--------|------|
-| [00](tutorials/00-preparation/) | 準備編 | ⭐ | ✅ |
-| [01](tutorials/01-basics/) | 基本操作 | ⭐ | ✅ |
-| [02](tutorials/02-navigation/) | ナビゲーション | ⭐⭐ | ✅ |
-| [03](tutorials/03-editing/) | 編集操作 | ⭐⭐ | ✅ |
-| [04](tutorials/04-search/) | 検索とファイル操作 | ⭐⭐ | 🚧 |
-| [05](tutorials/05-lsp/) | LSP活用 | ⭐⭐⭐ | 🚧 |
-| [06](tutorials/06-git/) | Git統合 | ⭐⭐⭐ | 🚧 |
-| [07](tutorials/07-copilot/) | Copilot活用 | ⭐⭐⭐ | 🚧 |
-
-各章30分〜1時間で、実践的な練習ファイル付き。初心者でも安心して学べます。
-
-## 🤝 貢献
-
-改善提案やバグ報告は、Issueまたはプルリクエストでお願いします。
-
-## 📝 ライセンス
-
-MIT License
-
-## 🙏 謝辞
-
-この設定は以下のプロジェクトやコミュニティから多くの影響を受けています:
-- [LazyVim](https://www.lazyvim.org/)
-- [NvChad](https://nvchad.com/)
-- [AstroNvim](https://astronvim.com/)
-- Neovimコミュニティ全体
-
----
-
-**作成者**: [@kyoneken](https://github.com/kyoneken)  
-**最終更新**: 2025年11月29日
+初回起動でプラグインが入る。詳しいキーは [doc/basic-usage.md](doc/basic-usage.md)。

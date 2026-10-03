@@ -1,5 +1,9 @@
 # Tree-sitter Core-Only Implementation Plan
 
+> Superseded. Do not follow this plan. Highlighting is `vim.treesitter` plus official `nvim-treesitter` (main). See the README.
+
+
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Remove all external Tree-sitter management and retain only Neovim 0.12's bundled parsers, highlighting, and syntax-node selection.

@@ -1,5 +1,9 @@
 # Tree-sitter Core-Only Design
 
+> Superseded. The current config uses Neovim's `vim.treesitter` plus official `nvim-treesitter` (main) for highlighting only. Do not follow this document. See the README.
+
+
+
 ## Goal
 
 Remove the archived `nvim-treesitter` stack and all locally managed external

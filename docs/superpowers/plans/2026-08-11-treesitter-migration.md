@@ -1,5 +1,8 @@
 # Tree-sitter Migration Implementation Plan
 
+> 廃止。この手順には従わない。ハイライトは Neovim の `vim.treesitter` と公式 `nvim-treesitter`（main）だけ。README を参照。
+
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Replace the archived nvim-treesitter stack with Neovim 0.12 core APIs plus the neovim-treesitter community parser registry, starting from a verified clean local state.
