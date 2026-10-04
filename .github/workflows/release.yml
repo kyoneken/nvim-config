@@ -1,0 +1,60 @@
+# バージョンの切り方
+#
+# 1. CHANGELOG.md に `## [X.Y.Z]` を書く（今の版は 3.0.0）。
+# 2. そのコミットに `vX.Y.Z` を打って push する。プレリリースは `vX.Y.Z-rc.1`。
+# 3. このワークフローが GitHub Release を作り、`nvim-config-vX.Y.Z.zip` を載せる。
+#
+# zip はタグが指すコミットの追跡ファイル一式（init.lua、lua/、ドキュメント、
+# 追跡されている lazy-lock.json など）。`.git` は入らない。展開すると
+# `nvim-config-vX.Y.Z/` ができるので、それを `~/.config/nvim` に置く。
+name: Release
+
+on:
+  push:
+    tags:
+      # Actions のタグフィルタはグロブ。細かい形は prepare-release-asset.sh で見る。
+      - "v[0-9]*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Publish GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build archive and notes
+        run: ./scripts/prepare-release-asset.sh "${GITHUB_REF_NAME}"
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          asset="dist/nvim-config-${tag}.zip"
+          notes="dist/release-notes.md"
+
+          if [[ "$tag" == v*-* ]]; then
+            prerelease=1
+          else
+            prerelease=0
+          fi
+
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" "$asset" --clobber
+            if [[ "$prerelease" -eq 1 ]]; then
+              gh release edit "$tag" --title "$tag" --notes-file "$notes" --prerelease
+            else
+              gh release edit "$tag" --title "$tag" --notes-file "$notes" --latest
+            fi
+          elif [[ "$prerelease" -eq 1 ]]; then
+            gh release create "$tag" "$asset" --title "$tag" --notes-file "$notes" --prerelease
+          else
+            gh release create "$tag" "$asset" --title "$tag" --notes-file "$notes"
+          fi

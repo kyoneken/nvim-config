@@ -65,4 +65,6 @@ git clone https://github.com/kyoneken/nvim-config.git ~/.config/nvim
 nvim
 ```
 
+履歴が要らないときは [Releases](https://github.com/kyoneken/nvim-config/releases) の `nvim-config-vX.Y.Z.zip` を展開し、中の `nvim-config-vX.Y.Z` を `~/.config/nvim` にする。中身はそのタグ時点のファイル一式で、Git の履歴は入っていない。
+
 初回起動でプラグインが入る。詳しいキーは [doc/basic-usage.md](doc/basic-usage.md)。
